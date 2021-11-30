@@ -1,0 +1,96 @@
+#include<stdio.h>
+#include<string.h>
+void print(char a[],int c,int em);//输出函数 
+#define BUF_SS 101
+int main(void){
+	char buf[101],a[101],b[101];//a存储Text内容，b存储Link内容 
+	int state=0,c,num,em,clj[50],web[50],cl,we;//state输入状态0,1,2;em记录'_'的出现，clj记录[]的出现,web记录()的出现 
+	int x,d,y;
+	while(fgets(buf,BUF_SS,stdin)){
+		num=em=c=0;
+		if(buf[0]=='\n')
+		{
+			if(state==1)printf("</p>\n");//段落结束 
+			else if(state==2)printf("</ul>\n");//无序列表结束 
+			state=0;
+			continue;
+		 }
+		else {
+			memset(clj,0,sizeof(clj));
+			for(c=0,cl=0,we=0;c<strlen(buf);c++)
+			{
+				if(buf[c]=='[')clj[cl++]=c;
+				if(buf[c]==']')clj[cl++]=c;
+				if(buf[c]=='(')web[we++]=c;
+				if(buf[c]==')')web[we++]=c;
+			}//遍历一遍找出超链接的位置
+			if(cl>0)//如果找到超链接 
+			{
+				for(c=cl/2,x=0,y=0;c--;)
+				{
+					memset(a,'\0',sizeof(a));
+					memset(b,'\0',sizeof(b));
+					for(d=clj[x];d<=clj[x+1];d++)
+					a[d-clj[x]]=buf[d];
+					for(d=web[x];d<1+web[x+1];d++)
+					b[d-web[x]]=buf[d];
+					for(d=clj[x];d-clj[x]<=web[x+1]-web[x];d++)buf[d]=b[d-clj[x]];
+					for(d=clj[x]+strlen(b);d<clj[x]+strlen(b)+strlen(a);d++)buf[d]=a[d-clj[x]-strlen(b)];
+					x+=2;//下一次超链接处理做准备 
+				}
+			 } 
+		}
+		if(buf[0]=='#')
+		{
+			for(c=0;buf[c]=='#';c++,num++);//记录#出现的次数
+			for(;buf[c]==' ';c++);//处理空格
+			if(num>6)num=6;
+			printf("<h%d>",num);
+			print(buf,c,em);
+			printf("</h%d>\n",num); 
+		}//处理标题区块 
+		else if(buf[0]=='*')
+		{
+			if(state==0)printf("<ul>\n");
+			state=2;
+			printf("<li>");
+			for(c=1;buf[c]==' ';c++);//处理空格
+			print(buf,c,em);
+			printf("</li>\n");
+		}//处理无序列表 
+		else if(buf[0]!='\n'){
+			if(state==0)printf("<p>");
+			else printf("\n");
+			c=0; 
+			print(buf,c,em);
+			state=1;
+		}
+	}
+	if(state==1)printf("</p>");
+	else if(state==2)printf("</ul>");
+	return 0;
+}
+void print(char a[],int c,int em)
+{
+	for(;c<strlen(a)-1;c++)
+	{
+		if(a[c]=='_')
+				{
+					if(em==0)
+					{
+						printf("<em>");
+						em=1;
+					}
+					else
+					{
+						printf("</em>");
+						em=0; 
+					}
+				}
+		else if(a[c]=='(')printf("<a href=\"");
+		else if(a[c]==')')printf("\"");
+		else if(a[c]=='[')printf(">");
+		else if(a[c]==']')printf("</a>");
+		else printf("%c",a[c]);
+	}
+}
