@@ -1,0 +1,64 @@
+#include<stdio.h>
+#include<string.h>
+int e[50]={0};
+int main(void)
+{
+	char a[100];
+	int c,n,m,num,t,h=0,j=0,k=0,l=0;
+	while(1)
+	{
+		gets(a);
+		if(strcmp(a,"End of file"))
+		{
+			for(c=0;c<4;c++)
+		e[c]=0;
+		t=strlen(a);
+		for(c=0,n=0;c<strlen(a);c++)
+		{
+			if(a[c]=='.')e[++n]=c;
+			else if(a[c]<'0'||a[c]>'9'){
+				t=30;
+				break;
+			}
+		}
+		if(n!=3||t>15){
+			printf("NO\n");
+			continue;
+		}//没有三个点直接输出有其他字符也直接输出 
+		else
+		{
+			h=0,j=0,k=0,l=0;
+			for(c=e[0],m=e[1],num=0;m>c;c++)
+			{
+				num=(num*10+(a[c]-'0'));
+			}
+			if(e[0]==m)h--;
+			if(num>=0&&num<=255)h++;
+			for(c=e[1]+1,m=e[2],num=0;m>c;c++)
+			{
+				num=(num*10+(a[c]-'0'));
+			}
+			if(e[1]+1==m)j--;
+			if(num>=0&&num<=255)j++;
+			for(c=e[2]+1,m=e[3],num=0;m>c;c++)
+			{
+				num=(num*10+(a[c]-'0'));
+			}
+			if(e[2]+1==m)k--;
+			if(num>=0&&num<=255)k++;
+			for(c=e[3]+1,m=strlen(a),num=0;m>c;c++)
+			{
+				num=(num*10+(a[c]-'0'));
+			}
+			if(e[3]+1>=m)l--;
+			if(num>=0&&num<=255)l++;
+			if(h==1&&j==1&&k==1&&l==1)
+			printf("YES\n");
+			else printf("NO\n");
+		}
+		}
+		else break;
+    }
+	return 0;
+}
+
