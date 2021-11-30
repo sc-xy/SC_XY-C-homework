@@ -1,0 +1,91 @@
+#include<bits/stdc++.h>
+using namespace std;
+int a[100],b[100],c[100],i;
+void input(int a[])
+{
+	string s;
+	cin>>s;
+	a[0]=s.length();
+	for(i=1;i<=a[0];i++)a[i]=s[a[0]-i]-'0';//逆序输入并存储在数组中 
+}
+void output(int a[])
+{
+	int i;
+	if(a[0]==0){
+		cout<<"0"<<endl;
+		return;
+	} 
+	for(i=a[0];i>0;i--)cout<<a[i];
+	cout<<endl;
+	return;
+ }//输出函数，特别考虑为0的特殊情况
+int judge(int a[],int b[])
+{
+	int i;
+	if(a[0]>b[0])return 1;
+	if(b[0]>a[0])return -1;
+	for(i=a[0];i>0;i--)
+	{
+		if(a[i]>b[i])return 1;
+		if(a[i]<b[i])return -1;
+	}
+	return 0;
+ } 
+void jian(int a[],int b[])
+{
+	int i,pd;
+	pd=judge(a,b);
+	if(pd==0)
+	{
+		a[0]=0;
+		return;
+	}//相等就返回
+	if(pd==1)
+	{
+		for(i=1;i<=a[0];i++)
+		{
+			if(a[i]<b[i])
+			{
+				a[i+1]--;
+				a[i]+=10;
+			}
+			if(a[i]>=b[i])a[i]-=b[i];
+		}
+		while((a[a[0]]==0)&&(a[0]>0))a[0]--;
+		return; 
+	 } 
+}//减法运算函数，同时控制a数组的位数 
+void numcpy(int a[],int b[],int j)
+{
+	for(int i=1;i<=a[0];i++)
+	b[i+j-1]=a[i];
+	b[0]=a[0]+j-1;
+}//数组右移，模拟减法
+void chugao(int a[],int b[],int c[])
+{
+	int i,mid[100];
+	c[0]=a[0]-b[0]+1;//商的位数
+	for(i=c[0];i>0;i--)
+	{
+		memset(mid,0,sizeof(mid));//数组清空
+		numcpy(b,mid,i);
+		while(judge(a,mid)>=0)
+		{
+			c[i]++;
+			jian(a,mid);
+		 }
+	 } 
+	 while((c[c[0]]==0)&&(c[0]>0))c[0]--;//清除前置0
+ } 
+int main()
+{
+	memset(a,0,sizeof(a));
+	memset(b,0,sizeof(b));
+	memset(c,0,sizeof(c));
+	input(a);
+	input(b);
+	chugao(a,b,c);
+	output(c);
+	output(a);
+	return 0;
+}
