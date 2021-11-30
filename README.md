@@ -1,1 +1,0 @@
-# SC_XY-C-homework
