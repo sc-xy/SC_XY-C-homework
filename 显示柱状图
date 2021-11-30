@@ -1,0 +1,39 @@
+#include<stdio.h>
+char a[31][39];
+int main(void)
+{
+	int n,c,m,b=0,d=0,e,f;
+	char ch,*p,(*q)[39];
+	q=a+15;
+	for(p=a[15];p<a[15]+39;p++)
+	*p='-';//打印下划线 
+	scanf("%d",&n);
+	for(c=0;c<n;c++)
+	{
+		scanf("%d",&m);
+		b=m>b?m:b;//储存打印上限 
+		d=m<d?m:d;//储存打印下限 
+		scanf("%c",&ch);
+		if(ch==' '||ch=='\n')ch='+';//数字后无字符即为+ 
+		if(m>0) 
+		{
+			for(q=a+14;q>=a+15-m;q--)
+			{
+				(*q)[2*c]=ch;
+			}
+		}
+		else 
+		{
+			for(q=a+16;q<=a+15-m;q++)
+			{
+				(*q)[2*c]=ch;
+			}
+		}
+	}
+	for(e=15-b;e<=15-d;e++)
+	{
+		for(f=0;f<2*n-1;f++)printf("%c",a[e][f]);
+		printf("\n");
+	}
+	return 0;
+ }
