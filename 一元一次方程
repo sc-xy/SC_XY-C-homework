@@ -1,0 +1,101 @@
+#include<stdio.h>
+#include<string.h>
+int change(char *,int n,int m);//定义字符串转化为整数 
+int main(void)
+{
+	char a[100],ch;
+	float coe,mid;//未知数的系数 
+	int n,sum,b[100]={0},x[100]={0},c,t,pel,left,right,spel,m,v,zj;//sum表示常数项的和,b[100]用于记录符号出现的位置,pel标记‘=’出现的位置 
+	scanf("%d",&n);
+	while(n--)
+	{
+		scanf("%s",a);
+		for(c=0;c<strlen(a);c++)
+		if(a[c]=='=')pel=c;
+		for(c=0,t=0,v=0;c<strlen(a);c++)
+		{
+			if(c>=pel)
+			{
+				if(a[c]=='='||a[c]=='+')a[c]='-';
+				else if(a[c]=='-')a[c]='+';
+			}
+			if(a[c]=='-'||a[c]=='+')
+			b[++t]=c; 
+			if(a[c]>='a'&&a[c]<='z')
+			{
+				ch=a[c];
+				x[v++]=c;
+			}
+	    }
+	    b[0]=0;
+	    b[++t]=strlen(a);
+		for(c=0,coe=0;c<v;c++)
+		{
+			for(mid=0,m=0;m<t;m++)
+			{
+				if(x[c]>b[m]&&x[c]<b[m+1])
+				{
+					if(a[b[m]]=='-')
+					{
+						if(b[m]==0)
+						{
+							zj=b[m];
+							zj++;
+							if(zj==x[c])mid=-1;
+							for(zj;zj<x[c];zj++)
+							mid=mid*10-a[zj]+'0';
+						}
+						else if(x[c]-b[m]==1)mid=-1;//处理符号后直接接未知数的情况
+						else if(x[c]-b[m]>1)
+						{
+							zj=b[m];
+							for(zj++;zj<x[c];zj++)
+							mid=mid*10-a[zj]+'0';
+						 } 
+					}
+					else
+					{
+						if(b[m]==0)
+						{
+							for(zj=b[m];zj<x[c];zj++)
+							mid=mid*10+a[zj]-'0';
+						}
+						else if(x[c]-b[m]==1)mid=1;//处理符号后直接接未知数的情况
+						else if(x[c]-b[m]>=1)
+						{
+							for(zj=b[m],zj++;zj<x[c];zj++)
+							mid=mid*10+a[zj]-'0';
+						 } 
+					}
+				}
+				else if(x[c]==b[m])//处理无前置符号的情况 
+				mid=1;
+			}
+			coe+=mid;
+		}//求出未知数的系数 
+		for(c=0,sum=0;c<t;c++)
+		{
+			if(b[c+1]-b[c]>1||b[c]==0) 
+			sum+=change(a,b[c],b[c+1]);
+		 }
+        if(sum==0&&coe<0)coe=0-coe;
+		printf("%c=%.6f\n",ch,(0-sum)/coe);
+	}
+	return 0;
+}
+ int change(char a[],int n,int m)
+ {
+ 	int c,re,tu=-1;
+ 	if(n==m)return 0;
+ 	for(c=n;c<m;c++)
+ 	{
+ 		if(a[c]>='a'&&a[c]<='z')return 0;;
+	 }//如果有小写字母存在，直接退出
+	if(a[n]=='+'||a[n]=='-') 
+	{
+		for(c=n+1,re=0;c<m;c++)re=re*10+a[c]-'0';
+		if(a[n]=='-')re=0-re;
+	 } 
+	else for(c=n,re=0;c<m;c++)re=re*10+a[c]-'0';
+	return re;
+ }
