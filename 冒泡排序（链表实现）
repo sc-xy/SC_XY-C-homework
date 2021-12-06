@@ -1,0 +1,42 @@
+#include<iostream>
+using namespace std;
+typedef struct node
+{
+    int date;
+    struct node *next;
+}node;
+int main()
+{
+    int n,m,i,x;
+    node *h,*t,*p;
+    h=(node*)malloc(sizeof(node));
+    h->next=NULL;
+    t=h;
+    cin>>i;
+    n=i;
+    while(n--)
+    {
+        p=(node*)malloc(sizeof(node));
+        scanf("%d",&p->date);
+        p->next=NULL;
+        t->next=p;
+        t=p;
+    }
+    p->next=NULL;
+    for(n=0;n<i-1;n++)
+    {
+        for(p=h->next,t=p->next,m=0;m<i-1-n;p=p->next,t=t->next,m++)
+        {
+            if((p->date)>(t->date))
+            {
+                x=p->date;
+                p->date=t->date;
+                t->date=x;
+            }
+        }
+    }
+    cin>>m;
+    for(p=h->next,m--;m--;p=p->next);
+    printf("%d",p->date);
+    return 0;
+}
