@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+using namespace std;
+
+typedef struct student{
+    char name[10];
+    char stunum[20];
+    struct student*next;
+}student;
+
+int main()
+{
+    student *h,*t,*p,*cur;
+    int n;
+    scanf("%d",&n);
+    h=(student*)malloc(sizeof(student));
+    h->next=NULL;
+    t=h;
+    while(n--)
+    {
+        p=(student*)malloc(sizeof(student));
+        scanf("%s %s",&p->name,&p->stunum);
+        p->next=NULL;
+        t->next=p;
+        t=p;
+    }
+    for(p=h->next;p!=NULL;p=p->next)
+    {
+        for(t=p->next,cur=p;t!=NULL;t=t->next,cur=cur->next)
+        {
+            if(!strcmp((p->stunum),(t->stunum)))
+            {
+                cur->next=t->next;
+                free(t);
+            }
+        }
+    }
+    for(p=h->next;p!=NULL;p=p->next)
+    {
+        printf("%s %s\n",p->name,p->stunum);
+    }
+    return 0;
+}
