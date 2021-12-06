@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include<string.h>
+using namespace std;
+int main() {
+	int n,m,i,c,b;
+	int a[100][100],mid[100];
+	char input[10];
+	scanf("%d %d",&n,&m);
+	for(i=0;i<n;i++)
+	{
+		for(c=0;c<m;c++)scanf("%d",&a[i][c]);
+	}
+	scanf("%d",&b);
+	while(b--)
+	{
+		int q,w;
+		scanf("%s",input);
+		if(!strcmp(input,"SR"))
+		{
+			scanf("%d %d",&q,&w);
+			q--,w--;
+			for(i=0;i<m;i++)mid[i]=a[q][i];
+			for(i=0;i<m;i++)a[q][i]=a[w][i];
+			for(i=0;i<m;i++)a[w][i]=mid[i];
+		}
+		if(!strcmp(input,"SC"))
+		{
+			scanf("%d %d",&q,&w);
+			q--,w--;
+			for(i=0;i<n;i++)mid[i]=a[i][q];
+			for(i=0;i<n;i++)a[i][q]=a[i][w];
+			for(i=0;i<n;i++)a[i][w]=mid[i];
+		}
+		if(!strcmp(input,"DR"))
+		{
+			scanf("%d",&q);
+			q--;
+			for(c=0;c<n-q;c++){
+			for(i=0;i<m;i++)mid[i]=a[q+c][i];
+			for(i=0;i<m;i++)a[q+c][i]=a[q+c+1][i];
+			for(i=0;i<m;i++)a[q+c+1][i]=mid[i];
+			}
+			for(i=0;i<m;i++)a[n-1][i]=0;
+			n--;
+		}
+		if(!(strcmp(input,"DC")))
+		{
+			scanf("%d",&q);
+			q--;
+			for(c=0;c<m-q;c++)
+			{
+				for(i=0;i<n;i++)
+				{
+					mid[i]=a[i][q+c];
+					a[i][q+c]=a[i][q+c+1];
+					a[i][q+c+1]=mid[i];
+				}
+			}
+			for(i=0;i<n;i++)a[i][m-1]=0;
+			m--;
+		}
+		if(!strcmp(input,"IR"))
+		{
+			scanf("%d",&q);
+			q--;
+			for(c=0;c<n-q;c++)
+			{
+				for(i=0;i<m;i++)mid[i]=a[n-c][i];
+				for(i=0;i<m;i++)a[n-c][i]=a[n-c-1][i];
+				for(i=0;i<m;i++)a[n-c-1][i]=mid[i];
+			}
+			for(i=0;i<m;i++)a[q][i]=0;
+			n++;
+		}
+		if(!strcmp(input,"IC"))
+		{
+			scanf("%d",&q);
+			q--;
+			for(c=0;c<m-q;c++)
+			{
+				for(i=0;i<n;i++)mid[i]=a[i][m-c];
+				for(i=0;i<n;i++)a[i][m-c]=a[i][m-c-1];
+				for(i=0;i<n;i++)a[i][m-c-1]=mid[i];
+			}
+			for(i=0;i<n;i++)a[i][q]=0;
+			m++;
+		}
+	}
+	for(i=0;i<n;i++)
+	{
+		for(c=0;c<m;c++)printf("%d ",a[i][c]);
+		printf("\n");
+	}
+	return 0;
+}
