@@ -1,0 +1,172 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+char a[50];
+int p,u,r,q;
+struct quxian
+{
+	char name[50];//权限名称 
+	int level=-1;//权限等级 
+}qx[100]; 
+struct user
+{
+	char name[33];//角色名 
+	int num;//权限个数
+	struct quxian quxians[10];//角色权限 
+}users[100];
+struct people
+{
+	char name[33];//用户名
+	int num;//角色个数
+	struct user userss[20];//用户角色 
+}peoples[100];
+//查找权限位置，不存在即返回-1 
+int searchquanxian(char s[])
+{
+	int i;
+	for(i=0;i<100;i++)
+	if(!strcmp(s,qx[i].name))return i;
+	return -1; 
+}
+//查找角色位置，不存在即返回-1
+int searchuser(char s[])
+{
+	int i;
+	for(i=0;i<100;i++)
+	if(!strcmp(s,users[i].name))return i;
+	return -1;
+ } 
+//查找用户位置，不存在即返回-1 
+int searchpeople(char s[])
+{
+	int i;
+	for(i=0;i<100;i++)
+	if(!strcmp(s,peoples[i].name))return i;
+	return -1;
+}
+//读入权限
+void readquanxian(int n)
+{
+	int i,x;
+	for(i=0;i<n;i++)
+	{
+		scanf("%s",a);
+		if(strlen(a)>=3&&a[strlen(a)-2]==':')//如果分等级权限
+		{
+			for(x=0;x<strlen(a)-2;x++)qx[i].name[x]=a[x];
+			qx[i].level=a[strlen(a)-1]-'0';
+		 }
+		else strcpy(qx[i].name,a);//如果不分等级权限 
+	}
+}
+//读入角色 
+void readuser(int n)
+{
+	int i,j,x;
+	for(i=0;i<n;i++)
+	{
+		scanf("%s %d",users[i].name,&users[i].num);
+		for(j=0;j<users[i].num;j++)
+		{
+			scanf("%s",a);
+			if(strlen(a)>=3&&a[strlen(a)-2]==':')
+			{
+				for(x=0;x<strlen(a)-2;x++)users[i].quxians[j].name[x]=a[x];
+				users[i].quxians[j].level=a[strlen(a)-1]-'0';
+			}
+			else strcpy(users[i].quxians[j].name,a);
+		}
+	}
+}
+//读入用户 
+void readpeople(int u)
+{
+	int i,j;
+	char s[50];
+	for(i=0;i<u;i++)
+	{
+		scanf("%s %d",peoples[i].name,&peoples[i].num);
+		for(j=0;j<peoples[i].num;j++)
+		{
+			scanf("%s",s);
+			peoples[i].userss[j]=users[searchuser(s)];
+	    }
+	}
+}
+
+void f(int q)
+{
+	int i,pos;
+	char s[50];
+	for(i=0;i<q;i++)
+	{
+		int checklevel=-1,checkuser,checkquanxian;
+		scanf("%s %s",a,s);
+		checkuser=searchpeople(a);//查找用户是否存在 
+		if(strlen(s)>=3&&s[strlen(s)-2]==':')
+		{
+			checklevel=s[strlen(s)-1]-'0';//储存查询权限等级
+			s[strlen(s)-1]='\0'; 
+			s[strlen(s)-1]='\0'; 
+		}//处理查询权限字符串 
+		checkquanxian=searchquanxian(s);//查找权限是否存在 
+		if(checkuser==-1||checkquanxian==-1)
+		{
+			printf("false\n");
+			continue;
+		}//如果用户不存在或者权限不存在，输出
+		if(checklevel==-1)//如果查询不包含等级 
+		{
+			if(qx[checkquanxian].level==-1)//查询不分等级的权限 
+			{
+				int result=-1;//检验结果
+				for(int i=0;i<peoples[checkuser].num;i++)//遍历用户名下的角色
+				{
+					for(int j=0;j<peoples[checkuser].userss[i].num;j++)//遍历用户名下角色的权限
+					{
+					if(!strcmp(s,peoples[checkuser].userss[i].quxians[j].name))result=1;
+					}
+				 }
+				if(result==1)cout<<"true\n";
+				else cout<<"false\n"; 
+			}
+			else//查询分等级的权限 
+			{
+				int result=-1;//检验结果
+				for(int i=0;i<peoples[checkuser].num;i++)//遍历用户名下的角色 
+				{
+					for(int j=0;j<peoples[checkuser].userss[i].num;j++)//遍历用户名下角色的权限
+					if(!strcmp(s,peoples[checkuser].userss[i].quxians[j].name))
+					result=max(result,peoples[checkuser].userss[i].quxians[j].level);//权限的最大值 
+				 }
+				if(result==-1)cout<<"false\n";
+				else cout<<result<<endl; 
+			}
+		 }
+		else//查询包含等级 
+		{
+			int result=-1;
+			for(int i=0;i<peoples[checkuser].num;i++)//遍历用户名下的角色 
+			{
+				for(int j=0;j<peoples[checkuser].userss[i].num;j++)//遍历用户名下角色的权限
+				if(!strcmp(s,peoples[checkuser].userss[i].quxians[j].name))
+					result=max(result,peoples[checkuser].userss[i].quxians[j].level);//权限的最大值
+			}
+			if(result>=checklevel)
+			cout<<"true\n";
+			else cout<<"false\n";
+		  }  
+	}
+}
+int main()
+{
+	cin>>p;
+	readquanxian(p);
+	cin>>r;
+	readuser(r);
+	cin>>u;
+	readpeople(u);
+	cin>>q;
+	f(q);
+	return 0;
+}
