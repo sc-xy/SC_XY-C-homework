@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+int a[7][10],ans[10][15];
+int main()
+{
+	int t,h,l,flag=1,x,y;
+	cin>>t;
+	while(t--)
+	{
+		flag=0;
+		for(h=1;h<=6;h++)
+		for(l=1;l<=9;l++)ans[h][l]=0; 
+		for(h=1;h<=6;h++)
+		{
+			for(l=1;l<=9;l++)
+			{
+				scanf("%1d",&a[h][l]);
+				if(a[h][l]==4||a[h][l]==0)ans[h][l]=2;
+				if(a[h][l]==3)
+				{
+					for(x=h-1;x<=h+1;x++)
+					{
+						for(y=l-1;y<=l+1;y++)
+						{
+							ans[x][y]=2;
+						}
+					}
+				}
+				if(a[h][l]==2)
+				{
+					for(x=h-1;x<=h+1;x++)
+					{
+						for(y=l-1;y<=l+1;y++)
+						{
+							ans[x][y]++;
+						}
+					}
+				}
+				if(a[h][l]==1)
+				{
+					ans[h][l+1]++;
+					ans[h][l+2]++;
+					ans[h][l+3]++;
+					ans[h][l+4]++;
+				}
+			}
+		}
+		for(h=1;h<=6;h++)
+		{
+			for(l=1;l<=9;l++)
+			{
+				if(ans[h][l]>=2)flag++;
+			}
+		 } 
+		if(flag==54)cout<<"Yes"<<endl;
+		else cout<<"No"<<endl;
+	}
+	return 0;
+}
