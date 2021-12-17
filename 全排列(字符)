@@ -1,0 +1,28 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int b[7];
+char a[7],c[7];
+void ch(int n)
+{
+	if(n==strlen(a))
+	{
+		cout<<c<<endl;
+		return;
+	}
+	int i,m;
+	for(i=0;i<strlen(a);i++)
+	{
+		if(b[i]==1)continue;
+		c[n]=a[i];
+		b[i]=1;
+		ch(n+1);
+		b[i]=0;
+	}	
+}
+int main()
+{
+	cin>>a;
+	ch(0);
+	return 0;
+}
