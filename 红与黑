@@ -1,0 +1,54 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int ans,ch[30][30],w,h;
+char a[30][30];
+void dfs(int n,int m)
+{
+    if(n-1>=0&&!ch[n-1][m]&&a[n-1][m]=='.')
+    {
+        ch[n-1][m]=1;
+        ans++;
+        dfs(n-1,m);
+    }
+    if(n+1<w&&!ch[n+1][m]&&a[n+1][m]=='.')
+    {
+        ch[n+1][m]=1;
+        ans++;
+        dfs(n+1,m);
+    }
+    if(m-1>=0&&!ch[n][m-1]&&a[n][m-1]=='.')
+    {
+        ch[n][m-1]=1;
+        ans++;
+        dfs(n,m-1);
+    }
+    if(m+1<h&&!ch[n][m+1]&&a[n][m+1]=='.')
+    {
+        ch[n][m+1]=1;
+        ans++;
+        dfs(n,m+1);
+    }
+}
+int main()
+{
+    int x,y;
+    while(scanf("%d %d",&h,&w)&&w&&h)
+    {
+        memset(ch,0,sizeof(ch));
+        ans=1;
+        for(int i=0;i<w;i++)for(int c=0;c<h;c++)
+        {
+            cin>>a[i][c];
+            if(a[i][c]=='@')x=i,y=c;
+        }
+        ch[x][y]=1; 
+        dfs(x,y);
+        cout<<ans<<endl;
+    }
+    return 0;
+}
+//这题最大的问题在于理解题目上
+//1.输入先是列数再是行数
+//2.不是走了一个黑色瓷砖后就不能再走（不需要回溯），而是能走到的最多的瓷砖数目（每到一个以前没走到的位置就可以//记一次数。
+
