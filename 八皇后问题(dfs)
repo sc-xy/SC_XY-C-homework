@@ -1,0 +1,43 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int a[10][10],b[10],t=1;
+void prin(int t)
+{
+	cout<<"No. "<<t<<endl;
+	for(int i=1;i<=8;i++)
+	{
+		for(int c=1;c<=8;c++)cout<<a[c][i]<<" ";
+		cout<<endl;
+	}
+}//打印函数
+int check(int row,int column)
+{
+	int i,j;
+	for(i=0;i<row;i++)if(a[i][column])return 0;//纵向检查
+	for(i=row-1,j=column-1;i>0&&j>0;i--,j--)if(a[i][j])return 0;//主对角线检查
+	for(i=row-1,j=column+1;i>0&&j<9;i--,j++)if(a[i][j])return 0;//次对角线检查
+	return 1;
+}
+void dfs(int n)
+{
+	if(n==9)
+	{
+		prin(t++);
+		return;
+	}
+	for(int i=1;i<9;i++)
+	{
+		a[n][i]=1;
+		// b[i]=1;
+		if(check(n,i))
+		dfs(n+1);
+		a[n][i]=0;//回溯
+		// b[i]=0;//回溯
+	}
+}
+int main()
+{
+	dfs(1);
+	return 0;
+}
