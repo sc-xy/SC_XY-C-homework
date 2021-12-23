@@ -1,0 +1,26 @@
+#include<iostream>
+using namespace std;
+int n,m,l;
+int main()
+{
+    while(scanf("%d %d",&n,&m)&&n&&m)
+    {
+        l=0;
+        if(m>n)swap(n,m);
+        if(n/m>1)
+        {
+            cout<<"win\n";
+            continue;
+        }
+        else for(;n/m==1;l++)
+        {
+            int i=n;
+            n=m;
+            m=i%m;
+        }
+        if(l%2==0)cout<<"win\n";
+        else cout<<"lose\n";
+    }
+    return 0;
+}
+//重要的是弄清楚一点，怎样让对手只有一个选择，以及在双方都只有一个选择的·情况下输赢情况怎样判断
