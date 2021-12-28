@@ -1,0 +1,24 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+    char a[300];
+    cin>>a;
+    int n;
+    cin>>n;
+    while(n--)
+    {
+        for(int i=0;i<strlen(a);i++)
+        {
+            if(a[i]>a[i+1])
+            {
+                for(int c=i;c<strlen(a);c++)a[c]=a[c+1];
+                break;
+            }
+        }
+    }
+    for(n=0;n<strlen(a)&&a[n]=='0';n++);//前导0
+    for(;n<strlen(a);n++)cout<<a[n];
+    return 0;
+}
