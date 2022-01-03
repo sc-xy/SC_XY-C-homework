@@ -1,0 +1,74 @@
+DFS：
+#include<iostream>
+#include<algorithm>
+using namespace std;
+char a[10000][10000];
+int n,m,cnt=0,i,l;
+int u[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+void dfs(int x,int y)
+{
+    a[x][y]='0';
+    for(int i=0;i<4;i++)
+    {
+        int x1=x+u[i][0],y1=y+u[i][1];
+        if(x1>=0&&x1<n&&y1>=0&&y1<m&&(a[x1][y1]!='0'))dfs(x1,y1);
+    }
+}
+int main()
+{
+    cin>>n>>m;
+    for(i=0;i<n;i++)for(l=0;l<m;l++)cin>>a[i][l];
+    for(i=0;i<n;i++)for(l=0;l<m;l++)
+    {
+        if(a[i][l]!='0')
+        {
+            cnt++;
+            dfs(i,l);
+        }
+    }
+    cout<<cnt;
+    return 0;
+}
+BFS（似懂非懂，队列这玩意不太明白）：
+#include<iostream>
+#include<algorithm>
+using namespace std;
+char a[10000][10000];
+int n,m,cnt=0,i,l;
+int u[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+void bfs(int x,int y)
+{
+    cnt++;
+    int h=0,t=1;
+    int q[10000][2];
+    q[h][0]=x,q[h][1]=y;
+    while(h<t)
+    {
+        for(int i=0;i<4;i++)
+        {
+            int x1=q[h][0]+u[i][0],y1=q[h][1]+u[i][1];
+            if(x1>=0&&x1<n&&y1>=0&&y1<m&&(a[x1][y1]!='0'))
+            {
+                q[t][0]=x1;
+                q[t++][1]=y1;
+                a[x1][y1]='0';
+            }
+        }
+        h++;
+    }
+}
+int main()
+{
+    cin>>n>>m;
+    for(i=0;i<n;i++)for(l=0;l<m;l++)cin>>a[i][l];
+    for(i=0;i<n;i++)for(l=0;l<m;l++)
+    {
+        if(a[i][l]!='0')
+        {
+            bfs(i,l);
+        }
+    }
+    cout<<cnt;
+    return 0;
+}
+
